@@ -13,8 +13,8 @@ library(leaflet.extras)
 library(colormap)
 
 #Reading in My Data Set
-congress <- readxl::read_excel("../Documents/MAPSS UChicago/Research MA Thesis/Thesis Data/Congress Data for R.xlsx")
-
+congress <- readxl::read_excel("Congress Data for R.xlsx")
+state <- map_data("state")
 #Allows for Zoom Options
 getLeafletOptions <- function(minZoom, maxZoom, ...) {
   leafletOptions(
@@ -45,7 +45,7 @@ demo1 <- demo1 %>%
 
 
 #My Leaf Color Function (Change Bin Size to Show More Moderates)
-pal <- colorBin(c("red", "purple", "blue"),0:1, bins = 2, 0:1, reverse = TRUE, pretty = FALSE)
+pal1 <- colorBin(c("red", "blue"),0:1, bins = 2, 0:1, reverse = TRUE, pretty = FALSE)
 
 
 #Remove DC from the Polygon Set
@@ -60,7 +60,7 @@ leaflet(
   options= getLeafletOptions(-1.5, -.5)) %>% #Zoom Options  
   addPolygons( #Creating the Polygons and the Features of the Polygons
     weight=1.5,color="black", group = 'states', #separation between states
-    fillOpacity = .8, opacity = 1, fillColor = pal(demo1$dd), #aesthetics of polygons
+    fillOpacity = .8, opacity = 1, fillColor = pal1(demo1$dd), #aesthetics of polygons
     highlightOptions = highlightOptions(weight = 4)) %>% #not100%sure
   addLabelOnlyMarkers( #adding the labels
     data=sf_NPR1to1.centers, #need the labels to be in the center of the polygons
