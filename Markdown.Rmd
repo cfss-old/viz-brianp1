@@ -1,6 +1,6 @@
 ---
 title: "Untitled"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +26,8 @@ The data I am trying to visualize comes from my thesis data set that The general
 
 ```{r}
 #Reading in My Data Set
-congress <- readxl::read_excel("../Documents/MAPSS UChicago/Research MA Thesis/Thesis Data/Congress Data for R.xlsx")
+congress <- readxl::read_excel("Congress Data for R.xlsx")
+state <- map_data("state")
 
 #Allows for Zoom Options
 getLeafletOptions <- function(minZoom, maxZoom, ...) {
@@ -37,8 +38,8 @@ getLeafletOptions <- function(minZoom, maxZoom, ...) {
     tap = TRUE,
     attributionControl = TRUE , ...)
 }
-
-
+```
+```{r}
 #1966 Congressional Representatives
 demo1 <- congress %>%
   filter(`ELECTED 67` == 0) %>%
