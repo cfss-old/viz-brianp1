@@ -1,0 +1,293 @@
+---
+title: "89th and 90th Congress Demographics by Nation and State"
+runtime: shiny
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: scroll
+
+
+---
+
+
+
+
+```{r global}
+knitr::opts_chunk$set(verbose=FALSE, echo=FALSE, warning=FALSE, message=FALSE)
+library(tidyverse)
+library(rvest)
+library(tilegramsR)
+library(sp)
+library(sf)
+library(leaflet)
+library(leaflet.extras)
+library(colormap)
+library(USAboundaries)
+library(shiny)
+library(rgeos)
+library(flexdashboard)
+library(rsconnect)
+
+theme_set(theme_minimal())
+
+#Read Data
+
+congress <- readxl::read_excel("Congress Data for R.xlsx")
+state <- us_congressional(resolution = "high")
+sf_NPR1to1 <- sf_NPR1to1
+sf_NPR1to1.centers <- sf_NPR1to1.centers
+
+```
+
+89th and 90th Congress
+==============================
+
+
+### Introduction
+
+  The democratic system requires that the population of a given state must take an active stance in the issues that face both the individual and populace at large. This repeatedly entails that the public must attune one ear to the ramblings, non-sense, and spectacle that is the modern paradigm of the political sphere, all the while, attempting to remain as hopeful and optimistic as possible. Even with all of the ridiculousness and tangible neuroticism ones faces when nearing such a facet of life, it still is a responsibility of the ordinary citizen to take an active role. With the saturation of ambiguous claims and manipulated statistics, the truth can be nearly impossible to seek out. Taking into account, the amount of time it would take one person to review and analyze the information and then make a decision, the original issue would no longer have any semblance of importance. This visualization that I am presenting to you is an attempt to consolidate the sheer amount of political data into a format, that is not only accessible, but useful in the decision-making process. The goal of this visualization is to make quick comparisons while having crucial information conveniently ready. This visualization is the ground work and potential for a larger project that could bridge the gap between the public and politics. 
+
+
+
+### Data, Visualization, and Methods
+
+  One of the initial obstacles in dealing with such a data set is in regards to the nested component to it; change within people, people within districts and political parties, districts within states. Although this does provide an opportunity for sub-setting the data into different levels of a visualization and allowing the audience to understand the initial complexity with which we are trying to convey, this naturally intuitive understanding requires a more intricate means of cleaning and tidying the data.  In addition, the nature of political data allows for it to transfer onto a map of the country with ease, and again, providing another level accessibility for the reader. From there, the important variables and information and be overlaid onto the different components of the map providing a readily available summary of the values at differing levels.  To summarize, in thinking about the type of visualization that would best be suited for this rich data set, we wanted to utilized the nested structure in order to see the data at different levels, take advantage of the ease in interpretation in regards to a map format, and provide summary statistics for exploratory purposes.
+
+
+  The structure of this visualization is to start broad and narrow the scope of analysis, all the while engaging with the information at hand. We begin with the map of the country presented in hexagon format, seeing as it more aesthetically pleasing than the standard map of the United States, due to the symmetry of the hexagons used to represent each state. At this national level, the audience can engage by selecting the Congress and selecting a level of polarization. The selecting of Congress is simply the selecting of a time frame in which one should focus in on. The polarization level reflects how one may want to view the two national parties during the period of time they selected. Typically, the national map is presented to the public as a state with a specific political inclination. This means that either a state is Republican or Democrat, and one can get this view of the country by selecting the strict polarization. On the other hand, the loose polarization is a more subjective undertaking. Some states may be majority blue or majority red, but are all states simply one political party? By imbuing the color, we can see that most states have some blend of Republicans and Democrats. In addition, this national level allows to see broad changes from one election to the next. We can see how many states shifted from Democrats to Republicans, or vice versa. We can also notice that the southern states that have been predominately conservative for the past couple of decades use to be strong Democrats. This was during a period where Southern Democrats were perhaps somewhere between staunch Democrats and Republicans. This analysis allows for us to make a comparison to our current period of time where the polarization is greatly increasing without much evidence that it will shift. However, it would seem that we can take solace, or dread, in knowing that it was not always the case. Finally, by hovering over a given state, a pop-up window provides summary statistics such as number of representatives and state demographics such as percent of state dedicated to manufacturing or percent of state that is black. 
+
+
+  In narrowing the scope of analysis, we then subset the national map and focus on an individual state that is subdivided by districts. As opposed to a hexagon map, we opted for physical boundaries of the state and its districts. The primary reason for this choice in the change of visualization is the same explanation for the biggest challenge with working with geo-spatial data, creating from scratch is incredibly challenging. We initially had written code to create a circle of hexagons depending upon the number of districts in a given state. However, after many failed attempts, we needed to turn to outside sources for the data values in order to plot in the correct sequence. Essentially, geo-spatial data, particularly map data, requires a set of values for the boundaries along with correct latitudinal and longitudinal position. Since we were required to turn to an outside source, the closest we could find was a data set for the congressional districts of the 114th congress. The biggest problem becomes that the congressional districts have change quite substantially since 1967. We opted to use this data since it would be the most accurate data we could acquire, but in exploring the data, the audience is presented with only partially accurate districts. For some states that have gained districts over time, the user can notice repeats in the values of the labels. For those states that lost districts, the user would not be presented with some of the data. Even with this partial obscurity in the accuracy, it seems worth mentioning that this only affects a couple of districts within a given state. There are the outliers such as California gaining 10 seats over the past four decades, but the majority of states seem to only gain or lose one or two districts. With all that being said, the same principles from the national map apply. Color represents the political party of that representative, the labels of the district provide information on the representative, as well as demographics on the district. 
+
+
+
+
+
+###Critique
+
+  In regards to Cairo’s framework for a visualization, we can critique this visualization along those same five qualities. We have already discussed the level of truthfulness and functionality in regards to this this visualization, but despite the small level of obscurity, the values in the labels are accurate, and the transitions caused by the functions and interactivity both reflect truth. Although, the number of districts are incorrect, the values for each of those districts reflect truthful values.  In regards to the collection of the data, the quantities for each variable were pulled from reputable sources such as Congressional Quarterly which produces the metrics for both branches of congress. The functionality of this graphic is demonstrated through the level of interactivity and accuracy in transformations. This allows individuals to be active with the graphic rather than passively observing. In my opinion, the visualization is both aesthetically pleasing and intuitively comprehendible. The hexagons do sacrifice accuracy in regards to position, but they are pleasing since they do scale each state to the same size, and the symmetry provides a level of smoothness as opposed to the rugged lines in the state-district map. However, that graphic does sacrifice some for aesthetic but compensates in providing a sense of familiarity. The strongest quality of this graphic rests in the level of insight it presents to the audience. There is a lot of data that has come together, and the fact that this visualization is able to increase in complexity without reducing clarity or interpretability is what allows it to stand out as a solid visualization. Finally, this graphic is enlightening because I believe that through its accessibility and semi-structured narrative, it is able to reach a wide audience and challenge the way in which they view historical or contemporary politics. It provides enough data to begin asking more questions, and it suffices as a tool for exploratory research. As stated in the introduction, this is the beginning of a larger project that has great potential in reaching out to the public. 
+
+
+###Future Direction
+
+  Finally, I would like to briefly mention where we could take this project in the future. For starters, there needs to be tweaks and changes make to make clarification where there seem to be lacking. I believe that one method for me to do this is to create the circle of hexagon districts. In building upon this project, there is the potential for incorporating more interactivity such as what values and what variables would the reader wish to see in the label when he or she hovered over. There is more data that could be added into the visualization or require its own visualization such as votes on legislation and information on those pieces of information. Finally, there could incorporate the use of more static, traditional graphics to convey the summary statistics of particular variables. In my opinion, this exploratory tool could provide a captivating project and analysis on the change in congress over.  
+
+Map Visualization
+=================================
+
+Column {.sidebar}
+----------------------------------
+
+###Choose Congress
+
+```{r}
+#Chhose a congress
+selectInput("CongressInput", 
+            label = "Select a Congress",
+            choices = c("89th Congress (1965 - 1967)", "90th Congress (1967 - 1969)"),
+            selected = "89th Congress (1965 - 1967)",
+            multiple = FALSE)
+#choose a state
+uiOutput("stateInput")
+renderUI({
+    selectizeInput(
+      "stateInput",
+      "State",
+      choices = congress$region,
+      multiple = FALSE
+    )
+  })
+
+#Choose a polarization
+selectInput("partyInput",
+            label = "Polarization",
+            choices = c("Strict Polarization", "Loose Polarization"),
+            selected = "Strict Polarization",
+            multiple = FALSE
+                    )
+
+```
+
+
+
+Column {.tabset .tabset-fade}
+----------------------------------
+
+###National Map
+
+```{r}
+#Specifies zoom controls and I believe hover controsl
+getLeafletOptions <- function(minZoom, maxZoom, ...) {
+    leafletOptions(
+      crs = leafletCRS("L.CRS.Simple",
+                       proj4def = "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs",
+                       resolutions = 1.5^(25:15)),
+      minZoom = minZoom, maxZoom = maxZoom,
+      dragging = TRUE, zoomControl = TRUE,
+      tap = TRUE,
+      attributionControl = TRUE , ...)
+}
+#Need to get rid of DC since the congress for R excel sheet does not have DC
+  sf_NPR1to1 <- sf_NPR1to1%>%
+    filter(state != "DC")
+  sf_NPR1to1.centers <- sf_NPR1to1.centers %>%
+    filter(state != "DC")
+#creating plot
+renderLeaflet({
+  #extracting a data frame from the sf object
+    FID <- sf_NPR1to1
+    st_geometry(FID) <- NULL
+    #pulling out the Federal ID
+    FID <- FID %>%
+      select(FID, state)
+    #Decided what data set we are doing depending upon which congress since different congresses have different values and representatives
+    demo <- if(input$CongressInput == "89th Congress (1965 - 1967)"){
+      congress %>%
+        filter(`ELECTED 67` == 0) %>%
+        group_by(STATE2) %>%
+        count(PARTYN) %>%
+        mutate(perc = round((n/sum(n))*100))%>%
+        select(STATE2, PARTYN, n, perc)
+      
+    } else {
+      congress %>%
+        filter(`ELECTED 67` == 1 | `RE-ELECTED 67` == 1) %>%
+        group_by(STATE2) %>%
+        count(PARTYN) %>%
+        mutate(perc = round((n/sum(n))*100))%>%
+        select(STATE2, PARTYN, n, perc)
+    }
+    #pulling out the percent of democrats
+    dem <- demo %>%
+      spread(key = PARTYN, value = perc, fill = 0) %>%
+      filter(dd > 0 | rr == 100) %>%
+      select(STATE2, dd) 
+    #pulling out percent of republicans
+    dem1 <- demo %>%
+      spread(key = PARTYN, value = perc, fill = 0) %>%
+      filter(dd == 100 | rr > 0) %>%
+      select(STATE2, rr)
+    #pulling out number of republican representatives
+    repr <- demo %>%
+      spread(key = PARTYN, value = n, fill = 0) %>%
+      filter(rr == max(rr))%>%
+      select(STATE2, rr)
+    #pulling out number of democrat representatives
+    repd <- demo %>%
+      spread(key = PARTYN, value = n, fill = 0) %>%
+      filter(dd == max(dd))%>%
+      select(STATE2, dd)
+    #selecting which variables I want from my Congress for R excel sheet
+    cong <- congress %>%
+      select(STATE2, region, `URBAN STATE`:`PUBLIC ADMIN STATE`) %>%
+      unique()
+    #Total number of representatives 
+    tlabs <- congress %>%
+      filter(!is.na(`89thDISTRICT`)) %>%
+      group_by(STATE2) %>%
+      mutate(Total = max(`89thDISTRICT`)) %>%
+      select(Total, STATE2) %>%
+      unique()
+  #We need to give each of these values the FID since this is how we will be able to add the labels when we over. This also ensures accurate values for each state. There was a porblem I had where Alaska did not switch from blue to red when swtiching congresses and it was becuase I found out that the graphic randomly sendig these values to different states
+    dem <- right_join(dem, FID, by = c("STATE2" = "state"))
+    dem1 <- right_join(dem1, FID, by = c("STATE2" = "state"))
+    repd <- right_join(repd, FID, by = c("STATE2" = "state"))
+    repr <- right_join(repr, FID, by = c("STATE2" = "state"))
+    tlabs <- right_join(tlabs, FID, by = c("STATE2" = "state"))
+    cong <- right_join(cong, FID, by = c("STATE2" = "state"))
+#choosing color depending upon polarization specificied 
+    pal <- if(input$partyInput == "Strict Polarization"){
+      colorBin(c("#3182bd", "#de2d26"),domain= c(0,100),
+               bins = 2, pretty = FALSE, reverse = TRUE)
+    } else {
+      colorBin(c("#3182bd", "#de2d26"),domain= c(0,100),
+               bins = 5, pretty = FALSE, reverse = TRUE)
+    }
+    
+    #creating the labels
+    labels<- sprintf("<p> <strong> %s </strong> <br/> Total Representatives: %0.2f <br/> Democrats: %0.2f (%0.2f%%)<br/> Republicans: %0.2f (%0.2f%%)<br/>Percent of State Union: %0.2f%% <br/> Percent of State Urban: %0.2f%% <br/> Percent of State Farmland: %0.2f%% <br/> Percent of State Manufacturing: %0.2f%% <br/> Percent of State Agriculture: %0.2f%% <br/> Percent of State Home Owner: %0.2f%% <br/> Percent of State Black: %0.2f%% <br/> Median State Income: $%0.2f<p>",
+cong$region, tlabs$Total, repd$dd, dem$dd, repr$rr, dem1$rr,cong$`UNION STATE`, cong$`URBAN STATE`, cong$`FARM STATE`, cong$`MANU STATE`, cong$`AGRIC STATE`, cong$`OWNER STATE`, cong$`BLACK STATE`, cong$`STATE MED INCO`) %>%
+      lapply(htmltools::HTML)
+    #putting all of it togehter to creat the visualization
+    leaflet(
+      sf_NPR1to1, #the dataset for the Map Outline and State Position
+      options = getLeafletOptions(-2,2.5)) %>%#Zoom Options  
+      addPolygons( #Creating the Polygons and the Features of the Polygons
+        weight=1.5,color="black", group = 'states', #separation between states
+        fillOpacity = .8, opacity = 1, fillColor = pal(dem$dd), #aesthetics of polygons
+        highlightOptions = highlightOptions(weight = 4),
+        label = labels)%>% #not100%sure
+      addLabelOnlyMarkers( #adding the labels
+        data=sf_NPR1to1.centers, #need the labels to be in the center of the polygons
+        label = ~as.character(state), #what is being put in the center of the polygon
+        labelOptions = labelOptions( #label options, need to review
+          noHide = 'T', textOnly = T,
+          offset=c(-4,-10), textsize = '11px')) %>%
+      addLegend(position = "bottomleft",pal = pal, values = dem$dd, 
+                title = "Proportion of Democrats")%>%
+      setMapWidgetStyle() #sets the maps CSS key/value properties
+    
+  })
+
+```
+
+
+
+
+
+###State Map
+
+```{r}
+renderLeaflet({
+    #selecting a state and filtering the datasets based on that state
+    if(!is.null(input$stateInput)){
+      state <- us_congressional(resolution = "high", state = input$stateInput)
+      congress <- filter(congress, region == input$stateInput)
+    }
+    #converting the sp object to a data frame to be able to use dplyr functions and pull out what we need such as state_name for joining, geoid for district id, and cd114fp for district specific id
+    state1 <- state %>%
+      as.data.frame() %>%
+      select(state_name, geoid, cd114fp)
+    #converting the sp object to an sf obejct
+    state = st_as_sf(state)
+    #converting the values from character to numeric in order to join
+    state1 <- transform(state1, cd114fp = as.numeric(cd114fp),
+                        geoid = as.numeric(geoid))
+    #filtering down congress data frame depending upon which congress
+    congress <- if(input$CongressInput == "89th Congress (1965 - 1967)"){
+      congress %>%
+        filter(`ELECTED 67` == 0) %>%
+        mutate(District = `89thDISTRICT`) 
+      
+    } else {
+      congress %>%
+        filter(`ELECTED 67` == 1 | `RE-ELECTED 67` == 1) %>%
+        mutate(District = `90th DISTRICT`)
+    }
+    #only one color since only one district can have a single representative
+    pal <- colorBin(c("#3182bd", "#de2d26"), domain = 0:1,
+                    bins = 2, reverse = TRUE, na.color = "#808080")
+    #giving the filtered down congress data frame the district ids in order to specify labels and geographic points
+    congress <- left_join(congress, state1, by = c("region" = "state_name"))
+    #selecting the values I want for the labels
+    congress <- congress %>%
+      select(NAME, District,PARTYDEM, PARTYNAME, `TERM START`, `TERM END`, `UNION (District)`:`MED INCOME (District)`, cd114fp) %>%
+      filter(District == cd114fp) %>%
+      unique()
+    #creating the labels
+    labels<- sprintf("<p> <strong> District: %s <br/> Party: %s <br/> Representative: %s </strong> <br/> Career Start: %0.0f <br/> Career End: %0.0f <br/>Percent of District Union: %0.2f%% <br/> Percent of District Urban: %0.2f%% <br/> Percent of District Farmland: %0.2f%% <br/> Percent of District Manufacturing: %0.2f%% <br/> Percent of District Agriculture: %0.2f%% <br/> Percent of District Home Owner: %0.2f%% <br/> Percent of District Black: %0.2f%% <br/> Median District Income: $%0.2f<p>",
+                     congress$District, congress$NAME, congress$PARTYNAME, congress$`TERM START`, congress$`TERM END`,congress$`UNION (District)`, congress$`URBAN (District)`, congress$`FARM (District)`, congress$`MANU (District)`, congress$`AGRI (District)`, congress$`OWNER (District)`, congress$`BLACK (District)`, congress$`MED INCOME (District)`) %>%
+      lapply(htmltools::HTML)
+    #putting it all together for the final visualization
+    leaflet(
+      state, #the dataset for the Map Outline and State Position
+      options = getLeafletOptions(3.5,7.5)) %>%#Zoom Options  
+      addPolygons( #Creating the Polygons and the Features of the Polygons
+        weight=1.5,color="black", group = 'geoid', #separation between states
+        fillOpacity = .8, opacity = 1, fillColor = pal(congress$PARTYDEM), #aesthetics of polygons
+        highlightOptions = highlightOptions(weight = 4),
+        label = labels)
+})
+```
+
+

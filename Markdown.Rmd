@@ -1,6 +1,8 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Final Project: Rough Draft"
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -133,6 +135,7 @@ leaflet(
       noHide = 'T', textOnly = T,
       offset=c(-4,-10), textsize = '11px')) %>%
   setMapWidgetStyle() #sets the maps CSS key/value properties
+
 
 ```
 
