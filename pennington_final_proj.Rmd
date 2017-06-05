@@ -23,17 +23,20 @@ library(leaflet)
 library(leaflet.extras)
 library(colormap)
 library(USAboundaries)
+install.packages("USAboundariesData", repos = "http://packages.ropensci.org", type = "source")
+library(USAboundariesData)
 library(shiny)
 library(rgeos)
 library(flexdashboard)
 library(rsconnect)
+
 
 theme_set(theme_minimal())
 
 #Read Data
 
 congress <- readxl::read_excel("Congress Data for R.xlsx")
-state <- us_congressional(resolution = "high")
+state <- USAboundaries::cb_2014_us_cd114_20m
 sf_NPR1to1 <- sf_NPR1to1
 sf_NPR1to1.centers <- sf_NPR1to1.centers
 
@@ -241,13 +244,14 @@ cong$region, tlabs$Total, repd$dd, dem$dd, repr$rr, dem1$rr,cong$`UNION STATE`, 
 renderLeaflet({
     #selecting a state and filtering the datasets based on that state
     if(!is.null(input$stateInput)){
-      state <- us_congressional(resolution = "high", state = input$stateInput)
+      state <- USAboundaries::us_congressional(resolution = "high", state = input$stateInput)
       congress <- filter(congress, region == input$stateInput)
     }
     #converting the sp object to a data frame to be able to use dplyr functions and pull out what we need such as state_name for joining, geoid for district id, and cd114fp for district specific id
     state1 <- state %>%
       as.data.frame() %>%
       select(state_name, geoid, cd114fp)
+    
     #converting the sp object to an sf obejct
     state = st_as_sf(state)
     #converting the values from character to numeric in order to join
@@ -289,5 +293,3 @@ renderLeaflet({
         label = labels)
 })
 ```
-
-

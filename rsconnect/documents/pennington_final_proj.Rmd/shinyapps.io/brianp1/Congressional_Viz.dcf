@@ -3,6 +3,8 @@ title:
 account: brianp1
 server: shinyapps.io
 appId: 186421
-bundleId: 854111
+bundleId: 854198
 url: https://brianp1.shinyapps.io/Congressional_Viz/
-when: 1496689448.83928
+when: 1496693302.9422
+asMultiple: FALSE
+asStatic: FALSE

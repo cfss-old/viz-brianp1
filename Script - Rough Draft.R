@@ -9,11 +9,12 @@ library(leaflet)
 library(leaflet.extras)
 library(colormap)
 library(USAboundaries)
+library(USAboundariesData)
 library(shiny)
 library(rgeos)
 library(flexdashboard)
 library(rsconnect)
-
+USAboundaries::us_congressional()
 ?us_congressional
 congress <- readxl::read_excel("Congress Data for R.xlsx")
 state <- us_congressional(resolution = "high")
